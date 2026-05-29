@@ -1,5 +1,7 @@
 # Ira Universe
 
+![ci](https://github.com/doshirush1901/ira-universe/actions/workflows/ci.yml/badge.svg)
+
 Public-safe **visitor MCP** for Claude Code and Cursor — explain what Ira is, how it is built, and how to adopt a factory-specific fork **without** Machinecraft CRM, Gmail, or customer data.
 
 Full operator stack lives in private **ira-v3**. This repo is intentionally small.
@@ -66,6 +68,10 @@ See `examples/marketing/case_study_workflow.md` for how case studies work in the
 
 - No secrets in Git — use your own `.env` only on a **private** fork if you expand beyond visitor mode.
 - Optional: `IRA_VISITOR_MCP_STRICT=1` blocks startup when Gmail/CRM env vars are set.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

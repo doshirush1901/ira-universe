@@ -206,6 +206,19 @@ Override: API `skip_triangulation=true`; MCP `draft_email` context containing `s
 
 Consumer inboxes (gmail.com, etc.) with no company hint skip the gate (personal one-offs).
 
+## Quantitative layer (advisory)
+
+After **level 1** (triangle brief) and before acting on outbound at **level 4**, Ira can attach **deterministic scores** that do not replace evidence:
+
+| Step | Tool | Registry IDs |
+|:-----|:-----|:---------------|
+| Brief | `ira brief` / `get_account_brief` | `TRIANGLE_COMPLETENESS` (gaps in JSON) |
+| Score | `ira math analyze --from-brief` / `math_mode_analyze_account` | `MATH_READINESS`, `MATH_CADENCE`, `MATH_PRIORITY` |
+| Cold identity | `score_thermoformer_scatter` | `SCATTER_XY_P` |
+| Dormant quotes | Blast from the Past | `BFP_REVIVE` |
+
+**Rules:** cite registry ID + confidence; if gaps remain, say **UNVERIFIED** and gather-data — do not let a high priority score override missing legs. Full index: [IRA_FORMULA_REGISTRY.md](IRA_FORMULA_REGISTRY.md). Math Mode detail: [MATH_MODE_V1.md](MATH_MODE_V1.md).
+
 ## Related docs
 
 - [stable_modes.md](stable_modes.md) §9 Account brief, §8 Revenue sprint
@@ -214,3 +227,5 @@ Consumer inboxes (gmail.com, etc.) with no company hint skip the gate (personal 
 - [LLM_COST_OPTIMIZATION.md](LLM_COST_OPTIMIZATION.md) — ReAct / parallel caps vs cascade level
 - [CONTEXT_GRAPH.md](CONTEXT_GRAPH.md) — precedents, 1-hop expand, similar companies
 - [MCP_OPERATOR_GUIDE.md](MCP_OPERATOR_GUIDE.md) — triangulation front doors
+- [IRA_FORMULA_REGISTRY.md](IRA_FORMULA_REGISTRY.md) — top 10 Ira-built formulas + triangulation mapping
+- [MATH_MODE_V1.md](MATH_MODE_V1.md) — readiness / cadence / priority scoring

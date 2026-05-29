@@ -36,7 +36,7 @@ The separate **[ira-universe](https://github.com/doshirush1901/ira-universe)** r
 - Public docs (including `IRA_BIRTH_CERTIFICATE.md`, `CURSOR_AGENTIC_LOOP.md`, `TIMEOUT_MODEL.md`, `PIPELINE_AUDIT.md` excerpt, `CURSOR_WORKFLOWS.md` excerpt), synthetic demos, and `examples/marketing/case_study_workflow.md`
 - Minimal `pyproject.toml` (`mcp` + `pydantic` only)
 
-Regenerate and publish clean history: `bash scripts/republish_ira_universe_clean.sh` (renames any existing repo to `ira-universe-archived-monolith`, creates fresh `ira-universe`, pushes one orphan commit). Export only: `python scripts/export_ira_universe_repo.py`.
+Regenerate and publish: `bash scripts/republish_ira_universe.sh` (incremental export, test, commit, push). One-time history reset: `bash scripts/republish_ira_universe_clean.sh`. Export only: `python scripts/export_ira_universe_repo.py`.
 
 **Archive repo:** Keep `ira-universe-archived-monolith` **private** (old monolith + PSG history). Public clone/share only `https://github.com/doshirush1901/ira-universe`.
 

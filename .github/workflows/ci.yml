@@ -19,3 +19,4 @@ jobs:
           version: 1.8.5
       - run: poetry install
       - run: poetry run pytest tests/test_ira_universe_mcp.py -q
+      - run: bash scripts/public_export_guard.sh .
