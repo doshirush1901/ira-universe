@@ -1,0 +1,36 @@
+{
+  "name": "Demo recruitment scoring (public)",
+  "role_default": "Procurement",
+  "dimensions": [
+    {
+      "id": "experience",
+      "name": "Relevant experience",
+      "description": "Synthetic demo dimension — replace with your private rubric locally.",
+      "weight": 0.25
+    },
+    {
+      "id": "skills_fit",
+      "name": "Skills fit",
+      "description": "Match to role responsibilities (demo).",
+      "weight": 0.25
+    },
+    {
+      "id": "communication",
+      "name": "Communication",
+      "description": "Clarity and professionalism (demo).",
+      "weight": 0.2
+    },
+    {
+      "id": "relocation_commitment",
+      "name": "Relocation / commitment",
+      "description": "Synthetic placeholder (demo).",
+      "weight": 0.1
+    },
+    {
+      "id": "case_study",
+      "name": "Case study",
+      "description": "Problem-solving exercise (demo).",
+      "weight": 0.2
+    }
+  ]
+}

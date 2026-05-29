@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "description": "PUBLIC DEMO DATA — fully synthetic. No real customers, URLs, prices, or CRM data.",
+  "artifacts": [
+    {
+      "id": "demo-acme-pf1-reference",
+      "title": "Acme Plastics — demo PF1-class reference (synthetic)",
+      "url": "https://example.com/news/demo-thermoforming-upgrade",
+      "tags": ["EU", "demo", "thermoforming", "PF1", "servo", "reference"],
+      "allowed_claims": [
+        "Demo narrative only: Acme Plastics evaluated a servo thermoforming line for tray production.",
+        "No real throughput, price, or delivery figures are asserted in this public demo registry."
+      ],
+      "geo": ["Demo Region A"],
+      "machine_models": ["PF1-DEMO"],
+      "competitor_hooks": ["legacy pneumatic line", "energy efficiency"],
+      "sensitivity": {
+        "cite_eur_150k": false,
+        "customer_name_public_ok": true,
+        "notes": "Synthetic demo — do not cite as a real customer case externally."
+      },
+      "summary": "Placeholder artifact for outbound drafting tests and demos."
+    },
+    {
+      "id": "demo-formpack-style-sheet",
+      "title": "Example Thermoforming Co. — demo sheet application (synthetic)",
+      "url": "https://example.com/products/demo-sheet-line",
+      "tags": ["formpack-style", "sheet", "demo"],
+      "allowed_claims": [
+        "Demo only: Example Thermoforming Co. publishes generic capability statements on example.com."
+      ],
+      "geo": ["Demo Region B"],
+      "machine_models": [],
+      "competitor_hooks": [],
+      "sensitivity": {"notes": "Synthetic"},
+      "summary": "Second demo row for tag overlap tests (formpack keyword is generic demo label only)."
+    }
+  ]
+}

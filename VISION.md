@@ -1,0 +1,143 @@
+# Ira — Vision
+
+This document describes where Ira is, where it's going, and what we
+deliberately choose not to do.
+
+## What Ira Is
+
+Ira is a multi-agent AI system purpose-built for Machinecraft. It is not a
+platform, not a framework, and not a product for other companies. Every design
+decision optimizes for one customer: Machinecraft and its founder.
+
+The goal: an AI system that knows the business deeply enough to handle sales,
+production, finance, marketing, HR, and quality — not by being a generalist,
+but by routing to specialists who each own their domain.
+
+## Current State
+
+### What works
+
+- 35 specialist agents with ReAct loops and domain-specific tools
+- 17-step request pipeline (perceive → remember → route → execute → learn — full list in AGENTS.md)
+- Three-tier routing: deterministic → procedural memory → LLM
+- Hybrid retrieval across Qdrant (vectors), Neo4j (graph), and Mem0 (memory)
+- Graph-vector stitching — force-fetches Qdrant chunks for graph entities
+- Contextual retrieval — document-level summaries prepended to every chunk
+- Semantic chunking via Chonkie with Voyage AI embeddings + table preservation
+- Ten memory subsystems including dream mode for overnight consolidation
+- Body-system metaphor for subsystem organization
+- REST API, CLI, MCP server (104 tools — see `docs/MCP_OPERATOR_GUIDE.md`), and Next.js web UI
+- CRM with companies, contacts, deals, and quotes in PostgreSQL
+- Drip campaign engine with 7-stage sequences
+- Document ingestion pipeline (PDF, DOCX, Excel) via Docling + Chonkie
+- Configurable delegation depth (default 5, via `AppConfig.max_delegation_depth`)
+- CI workflow (`.github/workflows/ci.yml`): secret scan, lint, smoke, reliability, full pytest with coverage floor
+
+### What needs work
+
+- **Agent tool reliability.** Some tools fail silently or return empty results
+  without the agent retrying or falling back. Phase-2 lands a `tool_runner`
+  helper (`src/ira/services/tool_runner.py`) for incremental adoption.
+- **Email processing.** The digestive system handles ingestion but the
+  end-to-end email workflow (classify → draft → review → send) needs
+  hardening.
+- **Testing coverage.** CI floor is **49% on src/ira** after the 2026-05-10 cleanup landed 20+ new modules with thin coverage (Argus, GEPA overlays, lead-discovery pipeline, outreach composer). Target remains 55%. Restore 50% floor by adding tests for `global_outreach_composer`, `outreach_top_n`, `learning_promotion`, `firecrawl_client`, and `argus`. Body systems and memory subsystems are still under-tested.
+- **Observability.** Pipeline stage timings, `get_learn_metrics()`, `GET /api/learn/last`, and `GET /api/deep-health` (with breaker state) are wired in code; there is no dashboard yet for trends across agents and memory growth.
+- **Cloud deploy / CD.** CI exists (lint/smoke/reliability/test/coverage). **Cloud deployment / CD is still manual** — the system runs locally with Docker Compose; no managed deploy yet.
+- **Multi-process scaling.** The single-instance lock (`data/.ira.lock`) plus broad SQLite usage (memory, corrections, journal, ingest, feedback, atlas, asclepius, embedding cache) means horizontal scaling is **not** supported today. Treat this as an architectural decision to revisit, not a bug.
+
+## Priorities
+
+In order:
+
+1. **Reliability.** Fix silent failures, add retries, improve error messages.
+   Ira should never return "I don't know" when the answer is in the KB.
+2. **Retrieval quality.** Better chunking, smarter query decomposition, tune
+   reranking.
+3. **Email workflow.** End-to-end email processing from inbox to sent folder,
+   with human-in-the-loop approval.
+4. **Testing.** Increase coverage for body systems, memory, and the pipeline.
+   Add integration tests that exercise the full request flow.
+5. **Observability.** Dashboard for pipeline metrics, agent performance, and
+   system health trends.
+
+## Architectural Principles
+
+### The pantheon model is intentional
+
+Thirty-five agents is not accidental complexity. Each agent has a bounded
+domain, its own tools, and its own system prompt. This makes the system:
+
+- **Debuggable.** When pricing is wrong, you look at Plutus. When a drip
+  email has the wrong tone, you look at Hermes.
+- **Testable.** Each agent can be tested in isolation with mocked tools.
+- **Extensible.** Adding a new capability means adding a new agent, not
+  modifying a monolith.
+
+Do not collapse agents into fewer, larger ones. The overhead of routing is
+small compared to the clarity of bounded responsibility.
+
+### The biological metaphor is intentional
+
+Body systems (digestive, immune, endocrine, etc.) are not just naming. They
+enforce separation of concerns:
+
+- The immune system validates; it does not generate.
+- The endocrine system modulates; it does not decide.
+- The voice system shapes; it does not reason.
+
+Do not merge body systems. If a new capability doesn't fit an existing system,
+create a new one with a clear metaphor.
+
+### Memory is a first-class citizen
+
+Ira's value compounds over time. Every interaction should make the system
+smarter. The ten memory subsystems exist because different kinds of knowledge
+need different storage and retrieval patterns:
+
+- Facts go to long-term memory (Mem0).
+- Patterns go to procedural memory (SQLite).
+- Relationships go to relationship memory (SQLite).
+- Narratives go to episodic memory (SQLite + Mem0).
+
+Do not shortcut memory. If an agent learns something useful, store it.
+
+### Prompts are configuration, not code
+
+System prompts live in `prompts/`, not inline in Python. This makes them:
+
+- Editable without code changes
+- Reviewable in isolation
+- Versionable with clear diffs
+
+Do not embed prompts in agent code. Use `load_prompt()`.
+
+## What We Will Not Do
+
+- **Generalize Ira into a platform.** Ira is for Machinecraft. Resist the
+  urge to make it configurable for arbitrary businesses.
+- **Add consumer-facing features.** Ira talks to Machinecraft employees and
+  their customers. It is not a consumer product.
+- **Replace the routing layer with a single large-context LLM.** The
+  three-tier routing (deterministic → procedural → LLM) exists because most
+  queries can be routed without an LLM call. This saves cost and latency.
+- **Add agents without clear domain boundaries.** Every agent must have a
+  role that doesn't overlap with existing agents. If the role overlaps,
+  extend the existing agent instead.
+- **Adopt heavy frameworks.** No LangChain, no LlamaIndex, no CrewAI. Ira
+  uses raw httpx for LLM calls and manages its own ReAct loop. The
+  complexity budget goes into domain logic, not framework abstractions.
+
+## Long-Term Direction
+
+- **Operational mode.** Move from TRAINING (draft-only) to OPERATIONAL
+  (send emails, update CRM, trigger campaigns) with proper guardrails.
+- **Proactive behavior.** Ira should surface insights without being asked:
+  stale deals, overdue milestones, vendor lead time changes, follow-up
+  reminders.
+- **Multi-modal ingestion.** Process images of machines, engineering
+  drawings, and handwritten notes from factory floors.
+- **Voice interface.** Phone-based interaction for factory staff who don't
+  use computers.
+- **Continuous learning.** Tighter feedback loops between corrections,
+  dream mode, and procedural memory so Ira self-improves faster.

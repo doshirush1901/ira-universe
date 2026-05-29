@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "ira-universe": {
+      "command": "poetry",
+      "args": ["run", "ira-universe-mcp"],
+      "cwd": "${CLAUDE_PROJECT_DIR:-.}"
+    }
+  }
+}

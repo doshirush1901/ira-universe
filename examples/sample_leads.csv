@@ -1,0 +1,4 @@
+company_name,country,contact_name,contact_email,stage,notes
+Example Thermoforming Co.,NL,Jane Buyer,buyer@example.com,QUALIFIED,Synthetic row for demos only
+Demo Manufacturing Ltd.,DE,Alex Prospect,alex.prospect@example.com,NEW,Synthetic row for demos only
+Acme Plastics LLC,US,Sam Sample,sam.sample@example.com,PROPOSAL_SENT,Synthetic row — EUR amounts are fake
